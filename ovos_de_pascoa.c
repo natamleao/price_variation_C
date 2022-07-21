@@ -90,7 +90,7 @@ void consultar_precos_dos_ovos(){
         if(copia_lista->preco_ovo < (media_de_precos/2)){
             printf("Ovo de Páscoa %d: TALVEZ DÊ PARA COMPRAR\n", copia_lista->identificador_ovo);
         }
-        else if(copia_lista->preco_ovo >= (media_de_precos/2) && copia_lista->preco_ovo <= media_de_precos){
+        else if(copia_lista->preco_ovo <= media_de_precos){
             printf("Ovo de Páscoa %d: ACHO QUE É MELHOR COMPRAR O VALOR EM BARRA DE CHOCOLATE\n", copia_lista->identificador_ovo);
         }
         else{
