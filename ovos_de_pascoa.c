@@ -1,101 +1,113 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <stdbool.h>
 
-typedef struct lista{
-    int identificador_ovo;
-    float preco_ovo;
+typedef struct _easterEggs{
+    int identifier;
+    float price;
+    struct _easterEggs *next;
+}EasterEggs;
 
-    struct lista *proximo_ovo;
-}ovos_de_pascoa;
+typedef struct _list{
+    size_t size;
+    EasterEggs *begin;
+}List;
 
-void entrada_de_dados();
-void adicionar_ovo_na_lista(int identificador, float preco, int posicao);
-float media_de_precos_dos_ovos();
-void consultar_precos_dos_ovos();
-
-ovos_de_pascoa *lista = NULL;
-int tamanho_lista = 0;
+List *ListCreate();
+EasterEggs *EasterEggsCreate(int identifier, float price);
+void ListAdd(List *list, int identifier, float price);
+void ListAddFirst(List *list, EasterEggs *easterEggs);
+void ListAddMiddle(List *list, EasterEggs *easterEggs);
+float EggsAverageprice(List *list);
+void EggsSearchprice(List *list);
+bool ListIsEmpty(List *list);
 
 int main(){
-    setlocale(LC_ALL, "");
 
-    //entrada_de_dados();
+    List *ListEggs = ListCreate();
+    int numberEggs, identifier;
+    float price;
 
-    adicionar_ovo_na_lista(291839, 45.0, 0);
-    adicionar_ovo_na_lista(928302, 80.0, 1);
-    adicionar_ovo_na_lista(292719, 75.0, 2);
-    adicionar_ovo_na_lista(281720, 66.0, 3);
-    adicionar_ovo_na_lista(281920, 15.0, 4);
-
-    consultar_precos_dos_ovos();
+    printf("\n----------------------------------------ADICIONAR NA LISTA----------------------------------------\n\n");
+    printf("INFORME A QUANTIDADE DE OVOS: ");
+    scanf("%d", &numberEggs);
+    puts("");
+    for(int i = 0; i < numberEggs; i++){
+        printf("INFORME A POSIÇÃO NA list->begin, identifier E PREÇO DO %dº OVO: ", (i+1));
+        scanf("%d %f ", &identifier, &price);
+        ListAdd(ListEggs, identifier, price);
+    }
+    //ListAdd(291839, 45.0, 0);
+    //ListAdd(928302, 80.0, 1);
+    //ListAdd(292719, 75.0, 2);
+    //ListAdd(281720, 66.0, 3);
+    //ListAdd(281920, 15.0, 4);
 
     return 0;
 }
 
-void entrada_de_dados(){
-    int quantidade_de_ovos, identificador, posicao;
-    float preco;
-    printf("\n----------------------------------------ADICIONAR NA LISTA----------------------------------------\n\n");
-    printf("INFORME A QUANTIDADE DE OVOS: ");
-    scanf("%d", &quantidade_de_ovos);
-    printf("\n");
-    for(int i = 0; i < quantidade_de_ovos; i++){
-        printf("INFORME A POSIÇÃO NA LISTA, IDENTIFICADOR E PREÇO DO %dº OVO: ", (i+1));
-        scanf("%d %d %f", &posicao, &identificador, &preco);
-        adicionar_ovo_na_lista(identificador, preco, posicao);
-        setbuf(stdin, NULL);
-    }
+List *ListCreate(){
+    List *newList = (List*)malloc(sizeof(List));
+    newList->size = 0;
+    newList->begin = NULL;
+    return newList;
 }
 
-void adicionar_ovo_na_lista(int identificador, float preco, int posicao){
-    if(posicao >= 0 && posicao <= tamanho_lista){
-        ovos_de_pascoa *novo_ovo = malloc(sizeof(ovos_de_pascoa));
-        novo_ovo->identificador_ovo = identificador;
-        novo_ovo->preco_ovo = preco;
-        novo_ovo->proximo_ovo = NULL;
-        if(lista == NULL){
-            lista = novo_ovo;
-        }
-        else if(posicao == 0){
-            novo_ovo->proximo_ovo = lista;
-            lista = novo_ovo;
-        }
-        else{
-            ovos_de_pascoa *copia_lista = lista;
-            for(int i = 0; i < (posicao-1); i++){
-                copia_lista = copia_lista->proximo_ovo;
-            }
-            novo_ovo->proximo_ovo = copia_lista->proximo_ovo;
-            copia_lista->proximo_ovo = novo_ovo;
-        }
-        tamanho_lista++;
-    }
+EasterEggs *EasterEggsCreate(int identifier, float price){
+    EasterEggs *newEasterEggs = (EasterEggs*)malloc(sizeof(EasterEggs));
+    newEasterEggs->identifier = identifier;
+    newEasterEggs->price = price;
+    newEasterEggs->next = NULL;
+    return newEasterEggs;
 }
 
-float media_de_precos_dos_ovos(){
-    float soma_precos_ovos = 0;
-    ovos_de_pascoa *copia_lista = lista;
-    for(int i = 0; i < tamanho_lista; i++){
-        soma_precos_ovos += copia_lista->preco_ovo;
-        copia_lista = copia_lista->proximo_ovo;
-    }
-    return (soma_precos_ovos/tamanho_lista);
+bool ListIsEmpty(List *list){
+    return list->size == 0;
 }
 
-void consultar_precos_dos_ovos(){
-    float media_de_precos = media_de_precos_dos_ovos();
-    ovos_de_pascoa *copia_lista = lista;
-    for(int i = 0; i < tamanho_lista; i++){
-        if(copia_lista->preco_ovo < (media_de_precos/2)){
-            printf("Ovo de Páscoa %d: TALVEZ DÊ PARA COMPRAR\n", copia_lista->identificador_ovo);
-        }
-        else if(copia_lista->preco_ovo >= (media_de_precos/2) && copia_lista->preco_ovo <= media_de_precos){
-            printf("Ovo de Páscoa %d: ACHO QUE É MELHOR COMPRAR O VALOR EM BARRA DE CHOCOLATE\n", copia_lista->identificador_ovo);
-        }
-        else{
-            printf("Ovo de Páscoa %d: NEM GOSTO DE CHOCOLATE MESMO, MELHOR COMPRAR UMA BARRA DE OURO COM ESSE DINEHIRO\n", copia_lista->identificador_ovo);
-        }
-        copia_lista = copia_lista->proximo_ovo;
+void ListAdd(List *list, int identifier, float price){
+    EasterEggs *newEasterEggs = EasterEggsCreate(identifier, price);
+    if(ListIsEmpty(list) || list->begin->price > newEasterEggs->price)
+        ListAddFirst(list, newEasterEggs);
+    else
+        ListAddMiddle(list, newEasterEggs);
+    list->size++;
+}
+
+void ListAddFirst(List *list, EasterEggs *easterEggs){
+    easterEggs->next = list->begin;
+    list->begin = easterEggs;
+}
+
+void ListAddMiddle(List *list, EasterEggs *easterEggs){
+    EasterEggs *assistent = list->begin;
+    while(assistent->next != NULL && easterEggs->price > assistent->next->price)
+        assistent = assistent->next;
+    easterEggs->next = assistent->next;
+    assistent->next = easterEggs;
+}
+
+float EggsAverageprice(List *list){
+    float sumEggPrices = 0.0;
+    EasterEggs *assistent = list->begin;
+    while(assistent != NULL){
+        sumEggPrices += assistent->price;
+        assistent = assistent->next;
+    }
+    return (sumEggPrices / list->size);
+}
+
+void EggsSearchprice(List *list){
+    float priceHedging = EggsAverageprice(list);
+    EasterEggs *assistent = list->begin;
+    while(assistent != NULL){
+        if(assistent->price < (priceHedging/2))
+            printf("Ovo de Páscoa %d: TALVEZ DÊ PARA COMPRAR\n", assistent->identifier);
+        else if(assistent->price <= priceHedging)
+            printf("Ovo de Páscoa %d: ACHO QUE É MELHOR COMPRAR O VALOR EM BARRA DE CHOCOLATE\n", assistent->identifier);
+        else
+            printf("Ovo de Páscoa %d: NEM GOSTO DE CHOCOLATE MESMO, MELHOR COMPRAR UMA BARRA DE OURO COM ESSE DINEHIRO\n", assistent->identifier);
+        assistent = assistent->next;
     }
 }
