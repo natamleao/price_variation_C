@@ -29,7 +29,7 @@ int main(){
     int numberEggs, identifier;
     float price;
 
-    printf("\n----------------------------------------ADICIONAR NA LISTA----------------------------------------\n\n");
+    printf("\n+----------------------------- ADICIONAR NA LISTA -----------------------------+\n\n");
     printf("INFORME A QUANTIDADE DE OVOS: ");
     scanf("%d", &numberEggs);
     puts("");
@@ -38,11 +38,6 @@ int main(){
         scanf("%d %f ", &identifier, &price);
         ListAdd(ListEggs, identifier, price);
     }
-    //ListAdd(291839, 45.0, 0);
-    //ListAdd(928302, 80.0, 1);
-    //ListAdd(292719, 75.0, 2);
-    //ListAdd(281720, 66.0, 3);
-    //ListAdd(281920, 15.0, 4);
 
     return 0;
 }
