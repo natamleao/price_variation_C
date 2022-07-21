@@ -30,6 +30,12 @@ EasterEggs *EasterEggsCreate(int identifier, float price);
  */
 void ListAdd(List *list, int identifier, float price);
 /**
+ * @brief Desaloca toda a lista 
+ * 
+ * @param list Lista de ovos
+ */
+void ListDestroy(List **list);
+/**
  * @brief Calcula a media dos ovos de pascoa que estao na lista
  * 
  * @param list Lista de ovos
@@ -41,7 +47,7 @@ float EggsAveragePrice(List *list);
  * 
  * @param list Lista de ovos
  */
-void EggsSearchPrice(List *list);
+void EggsSearchPrice(List **list);
 
 #endif
 

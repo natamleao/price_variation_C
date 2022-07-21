@@ -17,7 +17,9 @@ int main(){
         ListAdd(ListEggs, identifier, price);
     }
 
-    EggsSearchPrice(ListEggs);
+    EggsSearchPrice(&ListEggs);
+
+    printf("Lista == NULL: %d\n", ListEggs == NULL);
 
     return 0;
 }

@@ -42,6 +42,16 @@ void ListAdd(List *list, int identifier, float price){
     list->begin = newEasterEggs;
 }
 
+void ListDestroy(List **list){
+    EasterEggs *previous = NULL, *actual = (*list)->begin;
+    while(actual != NULL){
+        previous = actual, actual = actual->next;
+        free(previous);
+    }
+    free(*list);
+    *list = NULL;
+}
+
 float EggsAveragePrice(List *list){
     float sumEggPrices = 0.0;
     EasterEggs *assistent = list->begin;
@@ -52,9 +62,9 @@ float EggsAveragePrice(List *list){
     return (sumEggPrices / list->size);
 }
 
-void EggsSearchPrice(List *list){
-    float priceHedging = EggsAveragePrice(list);
-    EasterEggs *assistent = list->begin;
+void EggsSearchPrice(List **list){
+    float priceHedging = EggsAveragePrice(*list);
+    EasterEggs *assistent = (*list)->begin;
     while(assistent != NULL){
         if(assistent->price < (priceHedging / 2))
             printf("Ovo de Páscoa %d: TALVEZ DÊ PARA COMPRAR\n", assistent->identifier);
@@ -64,6 +74,7 @@ void EggsSearchPrice(List *list){
             printf("Ovo de Páscoa %d: NEM GOSTO DE CHOCOLATE MESMO, MELHOR COMPRAR UMA BARRA DE OURO COM ESSE DINEHIRO\n", assistent->identifier);
         assistent = assistent->next;
     }
+    ListDestroy(list);
 }
 
 /**************************************************************************************************************************************************/
