@@ -1,7 +1,7 @@
 #include "easterEggs.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <locale.h>
+
 /*************************************************************** PUBLIC INTERFACE *****************************************************************/
 
 struct _easterEggs{
